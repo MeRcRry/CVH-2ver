@@ -1,133 +1,173 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Проверка заявок</title>
+  <meta charset="UTF-8">
+  <title>Панель проверки заявок</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f4f6f8;
+      font-family: 'Inter', sans-serif;
       margin: 0;
       padding: 0;
+      background-color: #f5f7fa;
       display: flex;
       height: 100vh;
     }
     .container {
       display: flex;
       width: 100%;
-      height: 100%;
     }
-    .sidebar {
-      width: 300px;
+    .left-panel {
+      width: 30%;
       background-color: #ffffff;
       border-right: 1px solid #ddd;
-      padding: 20px;
       overflow-y: auto;
-      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+      padding: 1rem;
     }
-    .sidebar h2 {
-      margin-top: 0;
-      font-size: 1.2rem;
-      margin-bottom: 20px;
+    .application {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .application:hover {
+      background-color: #f0f4ff;
+    }
+    .application.active {
+      background-color: #e4edff;
+      border-color: #6589ff;
+    }
+    .application h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1rem;
       color: #333;
     }
-    .request-item {
-      padding: 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      margin-bottom: 10px;
-      background-color: #f0f0f0;
+    .application p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #666;
     }
-    .request-item:hover {
-      background-color: #e2e8f0;
-    }
-    .request-item.active {
-      background-color: #d1d5db;
-    }
-    .details {
-      flex: 1;
-      padding: 30px;
+    .right-panel {
+      flex-grow: 1;
+      padding: 2rem;
+      background-color: #f9fafc;
       overflow-y: auto;
-      background-color: #ffffff;
-    }
-    .details h2 {
-      margin-top: 0;
-      font-size: 1.5rem;
-      margin-bottom: 20px;
     }
     .section {
-      margin-bottom: 30px;
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
-    .section h3 {
-      font-size: 1.1rem;
-      color: #2c3e50;
-      margin-bottom: 10px;
+    .section h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+      color: #2d3748;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
     }
-    .section .row {
-      margin-bottom: 6px;
-      color: #555;
+    .field {
+      margin-bottom: 1rem;
     }
-    .bold {
-      font-weight: bold;
+    .field label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+      color: #4a5568;
+    }
+    .field p {
+      margin: 0;
+      color: #2d3748;
+      font-size: 0.95rem;
+    }
+    .status {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .status.в_процессе {
+      background-color: #f6ad55;
+    }
+    .status.проверено {
+      background-color: #48bb78;
+    }
+    .status.отклонено {
+      background-color: #e53e3e;
+    }
+    .footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #a0aec0;
+      margin-top: 2rem;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="sidebar">
-      <h2>Заявки</h2>
-      <div id="requestList"></div>
-    </div>
-    <div class="details">
-      <h2>Подробности заявки</h2>
-      <div class="section">
-        <h3>Данные клиента</h3>
-        <div id="leftData"></div>
+    <div class="left-panel">
+      <div class="application active">
+        <h3>12.07.2025</h3>
+        <p>СВХ: Астана-1</p>
+        <p>Получатель: ТОО Альфа</p>
+        <span class="status в_процессе">В процессе</span>
       </div>
+      <div class="application">
+        <h3>10.07.2025</h3>
+        <p>СВХ: Алматы-3</p>
+        <p>Получатель: ТОО Бета</p>
+        <span class="status проверено">Проверено</span>
+      </div>
+      <!-- ещё заявки... -->
+    </div>
+
+    <div class="right-panel">
       <div class="section">
-        <h3>Проверка</h3>
-        <div id="rightData"></div>
+        <h2>Данные из заявки</h2>
+        <div class="field">
+          <label>Наименование</label>
+          <p>ТОО Альфа</p>
+        </div>
+        <div class="field">
+          <label>Даты</label>
+          <p>12.07.2025 — 15.07.2025</p>
+        </div>
+        <div class="field">
+          <label>Количество техники</label>
+          <p>5 единиц</p>
+        </div>
+        <div class="field">
+          <label>Загрузка данных</label>
+          <p><a href="#" target="_blank">Открыть файл</a></p>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Проверка сотрудником</h2>
+        <div class="field">
+          <label>Статус</label>
+          <p><span class="status в_процессе">В процессе</span></p>
+        </div>
+        <div class="field">
+          <label>Дата проверки</label>
+          <p>—</p>
+        </div>
+        <div class="field">
+          <label>Конечный документ</label>
+          <p><a href="#">—</a></p>
+        </div>
+      </div>
+
+      <div class="footer">
+        &copy; 2025 Центр обработки заявок
       </div>
     </div>
   </div>
-
-  <script>
-    const requestList = document.getElementById("requestList");
-    const leftData = document.getElementById("leftData");
-    const rightData = document.getElementById("rightData");
-
-    const data = JSON.parse(localStorage.getItem("requests") || "[]");
-
-    function renderDetails(row) {
-      leftData.innerHTML = Object.entries(row)
-        .filter(([key]) => !["Статус", "Дата проверки", "Конечный документ", "Файл ответа"].includes(key))
-        .map(([key, val]) => `<div class='row'><span class='bold'>${key}:</span> ${val}</div>`) 
-        .join("");
-
-      rightData.innerHTML = ["Статус", "Дата проверки", "Конечный документ", "Файл ответа"]
-        .filter(key => row[key])
-        .map(key => `<div class='row'><span class='bold'>${key}:</span> ${row[key]}</div>`) 
-        .join("");
-    }
-
-    function renderRequests() {
-      requestList.innerHTML = "";
-      data.forEach((row, index) => {
-        const item = document.createElement("div");
-        item.className = "request-item";
-        item.textContent = `${row["Отметка времени"]?.slice(0, 16) || "Заявка"} | ${row["Адрес СВХ"] || ""} | ${row["Адрес электронной почты"] || ""}`;
-        item.addEventListener("click", () => {
-          document.querySelectorAll(".request-item").forEach(el => el.classList.remove("active"));
-          item.classList.add("active");
-          renderDetails(row);
-        });
-        requestList.appendChild(item);
-      });
-    }
-
-    renderRequests();
-  </script>
 </body>
 </html>
