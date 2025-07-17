@@ -1,171 +1,133 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Проверка заявок</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f8;
       margin: 0;
       padding: 0;
       display: flex;
-      flex-direction: column;
       height: 100vh;
     }
-    header {
-      text-align: center;
-      background: #fff;
-      padding: 20px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    main {
+    .container {
       display: flex;
-      flex: 1;
-      overflow: hidden;
+      width: 100%;
+      height: 100%;
     }
     .sidebar {
       width: 300px;
-      background: #fafafa;
+      background-color: #ffffff;
       border-right: 1px solid #ddd;
-      overflow-y: auto;
-      padding: 10px;
-    }
-    .content {
-      flex: 1;
       padding: 20px;
       overflow-y: auto;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
     }
-    .entry-summary {
+    .sidebar h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .request-item {
       padding: 10px;
-      border-bottom: 1px solid #ddd;
+      border-radius: 8px;
       cursor: pointer;
+      transition: background 0.2s ease;
+      margin-bottom: 10px;
+      background-color: #f0f0f0;
     }
-    .entry-summary:hover {
-      background: #e8e8e8;
+    .request-item:hover {
+      background-color: #e2e8f0;
     }
-    .box {
-      background: white;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    .request-item.active {
+      background-color: #d1d5db;
+    }
+    .details {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+      background-color: #ffffff;
+    }
+    .details h2 {
+      margin-top: 0;
+      font-size: 1.5rem;
       margin-bottom: 20px;
     }
-    .cheker {
-      background: #f1f0ff;
+    .section {
+      margin-bottom: 30px;
+    }
+    .section h3 {
+      font-size: 1.1rem;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    .section .row {
+      margin-bottom: 6px;
+      color: #555;
+    }
+    .bold {
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Проверка своих заявок</h1>
-    <input type="email" id="email" placeholder="Введите email">
-    <button onclick="checkStatus()">Проверить</button>
-  </header>
-
-  <main>
-    <div class="sidebar" id="sidebar"></div>
-    <div class="content" id="details"></div>
-  </main>
+  <div class="container">
+    <div class="sidebar">
+      <h2>Заявки</h2>
+      <div id="requestList"></div>
+    </div>
+    <div class="details">
+      <h2>Подробности заявки</h2>
+      <div class="section">
+        <h3>Данные клиента</h3>
+        <div id="leftData"></div>
+      </div>
+      <div class="section">
+        <h3>Проверка</h3>
+        <div id="rightData"></div>
+      </div>
+    </div>
+  </div>
 
   <script>
-    let entries = [];
+    const requestList = document.getElementById("requestList");
+    const leftData = document.getElementById("leftData");
+    const rightData = document.getElementById("rightData");
 
-    function formatDate(input) {
-      if (!input) return "—";
-      const date = new Date(input);
-      if (isNaN(date)) return input;
-      date.setHours(date.getHours() + 1);
-      return date.toLocaleDateString("ru-RU", {
-        day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit"
+    const data = JSON.parse(localStorage.getItem("requests") || "[]");
+
+    function renderDetails(row) {
+      leftData.innerHTML = Object.entries(row)
+        .filter(([key]) => !["Статус", "Дата проверки", "Конечный документ", "Файл ответа"].includes(key))
+        .map(([key, val]) => `<div class='row'><span class='bold'>${key}:</span> ${val}</div>`) 
+        .join("");
+
+      rightData.innerHTML = ["Статус", "Дата проверки", "Конечный документ", "Файл ответа"]
+        .filter(key => row[key])
+        .map(key => `<div class='row'><span class='bold'>${key}:</span> ${row[key]}</div>`) 
+        .join("");
+    }
+
+    function renderRequests() {
+      requestList.innerHTML = "";
+      data.forEach((row, index) => {
+        const item = document.createElement("div");
+        item.className = "request-item";
+        item.textContent = `${row["Отметка времени"]?.slice(0, 16) || "Заявка"} | ${row["Адрес СВХ"] || ""} | ${row["Адрес электронной почты"] || ""}`;
+        item.addEventListener("click", () => {
+          document.querySelectorAll(".request-item").forEach(el => el.classList.remove("active"));
+          item.classList.add("active");
+          renderDetails(row);
+        });
+        requestList.appendChild(item);
       });
     }
 
-    function getFileLink(link) {
-      if (!link || link === "-" || link.length < 10) return `<i style="color:gray">Файл не загружен</i>`;
-      if (link.includes("drive.google.com")) {
-        const match = link.match(/[-\w]{25,}/);
-        if (match) {
-          const fileId = match[0];
-          const directUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
-          return `<a href="${directUrl}" target="_blank">📥 Скачать</a>`;
-        } else return `<a href="${link}" target="_blank">📂 Открыть</a>`;
-      }
-      if (!link.includes("http")) return `<i style="color:gray">Файл загружен, но ссылка недоступна</i>`;
-      return `<a href="${link}" target="_blank">📂 Открыть</a>`;
-    }
-
-    async function checkStatus() {
-      const email = document.getElementById("email").value.trim().toLowerCase();
-      const url = `https://script.google.com/macros/s/AKfycbx5V9YBKypfzwoq7wxf8_2_Y9CwJbAAiU2wplWVVtiHb-JPzS1OILvXgGbj8BMdLybulA/exec?email=${encodeURIComponent(email)}`;
-      const sidebar = document.getElementById("sidebar");
-      const details = document.getElementById("details");
-      sidebar.innerHTML = "⏳ Загрузка...";
-      details.innerHTML = "";
-
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
-
-        entries = data.results.filter(e => (e["Адрес электронной почты"] || "").trim().toLowerCase() === email);
-
-        if (!entries.length) {
-          sidebar.innerHTML = "<p>Данных по email не найдено.</p>";
-          return;
-        }
-
-        entries.sort((a, b) => new Date(b["Отметка времени"]) - new Date(a["Отметка времени"]));
-
-        sidebar.innerHTML = entries.map((entry, index) => `
-          <div class="entry-summary" onclick="showDetails(${index})">
-            📅 ${formatDate(entry["Отметка времени"])}<br>
-            📍 ${entry["Наименование СВХ"] || "-"}<br>
-            🚛 Получатель: ${entry["Получатель"] || "-"}
-          </div>
-        `).join("");
-      } catch (e) {
-        sidebar.innerHTML = "❌ Ошибка при получении данных.";
-        console.error(e);
-      }
-    }
-
-    function showDetails(index) {
-      const entry = entries[index];
-      const details = document.getElementById("details");
-
-      const status = (entry["Статус"] || "-").toLowerCase();
-      let statusColor = "#d1ecf1";
-      if (status.includes("откл")) statusColor = "#f8d7da";
-      else if (status.includes("одобр") || status.includes("действ")) statusColor = "#d4edda";
-      else if (status.includes("ожид")) statusColor = "#97e6f5";
-
-      details.innerHTML = `
-        <div class="box">
-          <h3>📌 Отправленные данные</h3>
-          <b>📅 Отметка времени:</b> ${formatDate(entry["Отметка времени"])}<br>
-          <b>📍 Наименование СВХ:</b> ${entry["Наименование СВХ"] || "-"}<br>
-          <b>📆 Даты:</b> ${formatDate(entry["Укажите примерные даты, от "])} — ${formatDate(entry["До"])}<br>
-          <b>🚜 Техника:</b> ${entry["Укажите количество техники"] || "-"}<br>
-          <b>📎 Документ:</b><br>${getFileLink(entry["Загрузка данных"])}<br>
-          <b>🏢 Год выпуска:</b> ${entry["Год выпуска"] || "-"}<br>
-          <b>🏢 Товар:</b> ${entry["Товар"] || "-"}<br>
-          <b>🏢 Профиль риска:</b> ${entry["Профиль риска"] || "-"}<br>
-          <b>🏢 Указаная доп. информация:</b> ${entry["Укажите дополнительную информацию"] || "-"}<br>
-          <b>🏢 Получатель:</b> ${entry["Получатель"] || "-"}<br>
-        </div>
-
-        <div class="box cheker" style="background-color: ${statusColor};">
-          <h3>✅ Проверка</h3>
-          <b>Статус:</b> ${entry["Статус"] || "В ожидании"}<br>
-          <b>📅 Дата проверки:</b> ${formatDate(entry["Дата проверки"])}<br>
-          <b>📁 Конечный документ:</b><br>${getFileLink(entry["Конечный документ"])}<br>
-          <b>📅 Время проверки:</b> ${entry["Время проверки"] || "-"}<br>
-          <b>👤 Сотрудник 1:</b> ${entry["Сотрудник"] || "-"}<br>
-          <b>👤 Сотрудник 2:</b> ${entry["Сотрудник2"] || "-"}<br>
-        </div>
-      `;
-    }
+    renderRequests();
   </script>
 </body>
 </html>
