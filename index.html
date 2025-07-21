@@ -101,7 +101,9 @@ main {
   cursor: pointer;
   transition: background 0.2s;
 }
-
+.entry-summary{
+  padding: 10px;
+}
 .request-item:hover {
   background: #f0f4ff;
 }
@@ -110,7 +112,7 @@ main {
   background: #dbe9ff;
 }
 
-.box-cheker{
+.cheker{
   padding:  10px;
 }
 
@@ -206,10 +208,12 @@ main {
 
         sidebar.innerHTML = entries.map((entry, index) => `
           <div class="entry-summary" onclick="showDetails(${index})">
+          <hr>
             📅 ${formatDate(entry["Отметка времени"])}<br>
             📍 ${entry["Наименование СВХ"] || "-"}<br>
             🚛 Получатель: ${entry["Получатель"] || "-"}
         <b>📅 Дата проверки:</b> ${formatDate(entry["Дата проверки"])}
+          <hr>
           </div>
         `).join("");
       } catch (e) {
@@ -245,7 +249,6 @@ main {
         </div>
 
         <div class="box cheker" style="background-color: ${statusColor};">
-        <hr>
           <h3>✅ Проверка</h3>
           <b>Статус:</b> ${entry["Статус"] || "В ожидании"}<br>
           <b>📅 Дата проверки:</b> ${formatDate(entry["Дата проверки"])}<br>
@@ -253,7 +256,6 @@ main {
           <b>📅 Время проверки:</b> ${entry["Время проверки"] || "-"}<br>
           <b>👤 Сотрудник 1:</b> ${entry["Сотрудник"] || "-"}<br>
           <b>👤 Сотрудник 2:</b> ${entry["Сотрудник2"] || "-"}<br>
-          <hr?
         </div>
       `;
     }
