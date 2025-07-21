@@ -110,6 +110,10 @@ main {
   background: #dbe9ff;
 }
 
+.box-cheker{
+  padding:  10px;
+}
+
 /* Для мобильных */
 @media (max-width: 768px) {
   header {
@@ -222,6 +226,7 @@ main {
       let statusColor = "#d1ecf1";
       if (status.includes("откл")) statusColor = "#f8d7da";
       else if (status.includes("одобр") || status.includes("действ")) statusColor = "#d4edda";
+       else if (status.includes("заверш") || status.includes("одобр")) statusColor = "#00ff08";
       else if (status.includes("ожид")) statusColor = "#97e6f5";
 
       details.innerHTML = `
