@@ -147,7 +147,7 @@ input{
   border-style: 0px solid;
 }
   button{
-  margin-top:21px;
+  margin-top:27px;
   width: 100px;
   height: 40px;
   border-radius: 10px;
@@ -223,6 +223,11 @@ input{
         }
 
         entries.sort((a, b) => new Date(b["Отметка времени"]) - new Date(a["Отметка времени"]));
+
+      if (status.includes("откл")) statusColor = "#f8d7da";
+      else if (status.includes("одобр") || status.includes("действ")) statusColor = "#d4edda";
+       else if (status.includes("заверш") || status.includes("одобр")) statusColor = "#00ff08";
+      else if (status.includes("ожид")) statusColor = "#97e6f5";
 
         sidebar.innerHTML = entries.map((entry, index) => `
           <div class="entry-summary" onclick="showDetails(${index})">
