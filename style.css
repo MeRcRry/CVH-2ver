@@ -174,3 +174,64 @@ input{
   align-items: center;
   gap: 10px;
 }
+/* Адаптивная верстка — добавим ещё один брейкпоинт */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+
+  .inputmail {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  input, button {
+    width: 100%;
+    margin: 0 0 10px 0;
+  }
+
+  .htmlinks {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .form a {
+    width: 100%;
+    display: block;
+    text-align: center;
+  }
+
+  main {
+    flex-direction: column;
+  }
+
+  .sidebar, .content {
+    width: 100%;
+    max-height: none;
+  }
+
+  .cheker {
+    font-size: 15px;
+  }
+}
+
+/* Добавим ещё немного адаптивности для очень маленьких экранов */
+@media (max-width: 480px) {
+  .header-info h2 {
+    font-size: 18px;
+  }
+
+  .header-info p {
+    font-size: 13px;
+  }
+
+  .entry-summary {
+    font-size: 14px;
+  }
+
+  .cheker {
+    padding: 10px;
+  }
+}
