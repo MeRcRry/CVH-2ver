@@ -6,6 +6,120 @@
   box-sizing: border-box;
 }
 
+
+
+/* === Основной стиль хедера === */
+.modern-header {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+  gap: 1.5rem;
+}
+
+.header-top h1 {
+  font-size: 1.6rem;
+  margin: 0;
+  color: #333;
+}
+
+.header-top p {
+  color: #666;
+  margin: 0.5rem 0 1rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* === Форма email === */
+.inputmail {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.inputmail input {
+  flex: 1 1 auto;
+  min-width: 200px;
+  padding: 0.6rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.inputmail button {
+  padding: 0.6rem 1.2rem;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.inputmail button:hover {
+  background-color: #0056b3;
+}
+
+/* === Навигационные ссылки === */
+.header-links {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.header-links a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.header-links a:hover {
+  background-color: #e9f1ff;
+  color: #0056b3;
+  border-color: #cfe2ff;
+}
+
+/* === Адаптация под мобильные устройства === */
+@media (max-width: 600px) {
+  .modern-header {
+    padding: 1rem;
+  }
+
+  .inputmail {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .inputmail input,
+  .inputmail button {
+    width: 100%;
+  }
+
+  .header-links {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .header-links a {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+
+
+
+
+
+
+
 /* Верхняя панель */
 header {
   display: flex;
@@ -235,3 +349,4 @@ input{
     padding: 10px;
   }
 }
+
