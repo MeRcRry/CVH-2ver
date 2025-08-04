@@ -7,30 +7,25 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
+  
+<header class="modern-header">
+  <div class="header-top">
+    <h1>«НПЦ Агроинженерии»</h1>
+    <p>Введите email, указанный при подаче заявки,<br>чтобы отслеживать статус.</p>
 
     <div class="inputmail">
-    <input type="email" id="email" placeholder="Введите email">
-    <button onclick="checkStatus()">Проверить</button>
+      <input type="email" id="email" placeholder="Введите email">
+      <button onclick="checkStatus()">Проверить</button>
     </div>
+  </div>
 
-    
-            <div class="right-section">
-                <div class="info">
-                    <h2>«НПЦ Агроинженерии»</h2>
-                    <p>Введите email, который вы указывали при подаче заявки,<br> чтобы отслеживать статус проверки.</p>
-                </div>
+  <nav class="header-links">
+    <a href="form.html">📝 Заполнить форму</a>
+    <a href="new.html">📰 Новости</a>
+  </nav>
+</header>
+  
 
-            </div>
-    <div class="htmlinks">
-    <div class="form">
-      <a href="form.html">Заполнение Форм</a>
-    </div>
-    <div class="form">
-      <a href="new.html">Просмотр новостей</a>
-    </div>
-    </div>
-  </header>
 
   <main>
     <div class="sidebar" id="sidebar"></div>
@@ -147,3 +142,4 @@
   </script>
 </body>
 </html>
+
